@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+// USER MODALS
+model User {
+  id          Int       @id @default(autoincrement()) // Assuming it's the primary key
+  email       String
+  phone       String?
+  avatar      String?
+  password    String
+  dateOfBirth DateTime?
+  verified    Boolean?
+  firstName   String?
+  lastName    String?
+  shops       Shop[]
+}
+
+// SHOP MODALS
+model Shop {
+  id             Int         @id @default(autoincrement()) // Assuming it's the primary key
+  slug           String
+  email          String
+  name           String
+  phone          String
+  address        String
+  verified       Boolean
+  coverPicture   String
+  profilePicture String
+  socialLinks    SocialLinks @relation(fields: [socialLinksId], references: [id])
+  userId         Int
+  user           User        @relation(fields: [userId], references: [id])
+  socialLinksId  Int
+}
+
+// SOCIAL LINKS MODALS
+model SocialLinks {
+  id        Int     @id @default(autoincrement()) // Assuming it's the primary key
+  facebook  String?
+  youtube   String?
+  twitter   String?
+  instagram String?
+  Shop      Shop[]
+}
+
+// PRODUCT REVIEW MODALS
+model ProductReview {
+  id       Int    @id @default(autoincrement()) // Assuming it's the primary key
+  rating   Int
+  name     String
+  customer String
+  image    String
+  comment  String
+}
+
+// REFUND REQUEST MODALS
+model RefundRequest {
+  id       Int    @id @default(autoincrement()) // Assuming it's the primary key
+  orderNo  String
+  shopName String
+  amount   Int
+  status   String
+  name     String
+  image    String
+}
+
+// PAYOUT REQUEST MODALS
+model PayoutRequest {
+  id      Int    @id @default(autoincrement()) // Assuming it's the primary key
+  no      Int
+  amount  Int
+  date    String
+  status  String
+  message String
+}
